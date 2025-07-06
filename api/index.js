@@ -3,12 +3,14 @@ import mongoose from 'mongoose'
 import dotenv from 'dotenv'
 import userRouter from './routes/user.router.js';
 import authRouter from './routes/auth.route.js';
+import User from './models/user.model.js';
 dotenv.config();
 
 mongoose
 .connect(process.env.MONGO)
-.then(()=>{
+.then(async ()=>{
     console.log("connected...");
+     await User.init();
     // console.log('Mongo URI:', process.env.MONGO);
 } )
 .catch((err)=>{
