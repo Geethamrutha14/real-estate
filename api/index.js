@@ -26,3 +26,15 @@ app.listen(3000, ()=>{
 
 app.use('/api/user',userRouter);
 app.use('/api/auth',authRouter);
+
+// creating a middleware....
+
+app.use((err,req,res,next)=>{
+    const message = err.message || "Internal server error";
+    const statusCode = err.statusCode || 500;
+    return res.json({
+        success : false,
+        statusCode,
+        message
+    });
+});
