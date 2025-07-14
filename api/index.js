@@ -10,7 +10,7 @@ mongoose
 .connect(process.env.MONGO)
 .then(async ()=>{
     console.log("connected...");
-     await User.init();
+     await User.init(); // used to initialize the model indexes... it is built-in method
     // console.log('Mongo URI:', process.env.MONGO);
 } )
 .catch((err)=>{
