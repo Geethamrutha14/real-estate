@@ -1,10 +1,10 @@
 import React from 'react'
 import {FaSearch} from 'react-icons/fa';
 import {Link} from 'react-router-dom';
-import { useSelector } from 'react-redux';
+//import { useSelector } from 'react-redux';
 
 export default function Header() {
-  const {currentUser} = useSelector(state => state.user);
+  // const {currentUser} = useSelector(state => state.user);
   return (
     <div>
       {/* in header we will have a name , logo search bar and sign-up (home , about (optional)) */}
@@ -38,14 +38,10 @@ export default function Header() {
         <li className='text-slate-700 hover:underline hidden sm:inline'>About</li>
         </Link>
 
-        <Link to='/profile'>
-
-        {currentUser ? 
-        (<img className='rounded-full h-7 w-7 object-cover' src={currentUser.avatar} alt='profile'/>) :
+        <Link to='/sign-in'>
         <li className='text-slate-700 hover:underline sm:inline'>Sign-in</li>
-        }
-
         </Link>
+
        </ul>
        </div>
 

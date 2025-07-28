@@ -8,7 +8,14 @@ export const signup = async (req,res,next)=>{
     try{
     const {username,email,password} = req.body;
     const hashedPassword = bcryptjs.hashSync(password,10);
-    const newUser = new User({username,email,password : hashedPassword});
+    const encodedName = encodeURIComponent(username);
+    const avatarUrl = `https://ui-avatars.com/api/?name=${encodedName}&background=random`;
+    const newUser = new User({
+        username,
+        email,
+        password : hashedPassword,
+        avatar : avatarUrl
+    });
         await newUser.save();
     res.status(201).json('user created successfully');
     }
@@ -39,10 +46,10 @@ export const signin = async (req,res,next) =>{
 
 export const google = async (req,res,next)=>{
     try {
-        const user = await User.findOne({email : res.body.email});
+        const user = await User.findOne({email : req.body.email});
         if(user){
             // if user is found then register the user...
-            const token = jwt.sign({id : user._id}.process.env.JWT_SECRET);
+            const token = jwt.sign({id : user._id},process.env.JWT_SECRET);
             const {password : pass , ...rest} = user._doc;
             res
             .cookie('access_token',token,{httpOnly : true})
@@ -53,14 +60,18 @@ export const google = async (req,res,next)=>{
             //otherwise create a new user...
             const generatedPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
             const hashedPassword = bcryptjs.hashSync(generatedPassword,10);
+            const fullName = req.body.name || 'Guest Name';
+            const encodedName = encodeURIComponent(fullName);
+            const avatarUrl = `https://ui-avatars.com/api/?name=${encodedName}&background=random`;
             const newUser = new User({
-                username : req.body.name.split(" ").join("").Math.random().toString(36).slice(-4),
+                username : req.body.name.split(" ").join("").toLowerCase() + Math.random().toString(36).slice(-4),
+                email : req.body.email,
                 password : hashedPassword,
-                avatar : req.body.photo,
+                avatar : avatarUrl,
             });
             await newUser.save();
-            const token = jwt.sign({id : user._id}.process.env.JWT_SECRET);
-            const {password : pass , ...rest} = user._doc;
+            const token = jwt.sign({id : newUser._id},process.env.JWT_SECRET);
+            const {password : pass , ...rest} = newUser._doc;
             res
             .cookie('access_token',token,{httpOnly:true})
             .status(200)

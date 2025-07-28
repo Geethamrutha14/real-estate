@@ -17,7 +17,7 @@ const userschema = new mongoose.Schema({
     },
     avatar : {
         type : String,
-        default : "",
+        default : "https://ui-avatars.com/api/?name=User+Name",
     }
 }, {timestamps : true});
 
